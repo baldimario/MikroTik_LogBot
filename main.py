@@ -15,10 +15,12 @@ TELEGRAM_IDS = [
 ]
 
 def load_chat_ids():
+	global TELEGRAM_IDS
 	with open('chat_ids', 'r') as f:
 		TELEGRAM_IDS = [int(chat_id.rstrip("\n")) for chat_id in f.readlines() if chat_id.rstrip("\n") != '']
 
 def save_chat_ids():
+	global TELEGRAM_IDS
 	with open('chat_ids', 'w') as f:
 		f.writelines([str(chat_id)+"\n" for chat_id in TELEGRAM_IDS])
 
@@ -43,6 +45,7 @@ load_chat_ids()
 bot = telepot.Bot(TELEGRAM_BOT_KEY)
 
 def announce(message):
+	global TELEGRAM_IDS
 	write_log(message)
 		
 	for telegram_id in TELEGRAM_IDS:
@@ -59,6 +62,7 @@ def announce(message):
 			write_log('Bot error: [{}] {}'.format(telegram_id, message))
 
 def handle(msg):
+	global TELEGRAM_IDS
 	content_type, chat_type, chat_id = telepot.glance(msg)
 	
 	if chat_id not in TELEGRAM_IDS:
